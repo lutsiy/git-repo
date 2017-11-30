@@ -3,7 +3,8 @@
  * @author Ilya Lutsevich
  * @version dated Nov 27 2017
  */
-
+// Изменения1
+// Изменения2 
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
