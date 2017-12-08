@@ -6,6 +6,27 @@ package Lesson_05;
  * @version dated Dec 08 2017
  * @link https://github.com/lutsiy/git-repo.git
  */
+
+/*      1. Создать класс "Сотрудник" с полями: ФИО, должность, email, телефон, зарплата, возраст;
+
+        2. Конструктор класса должен заполнять эти поля при создании объекта;
+
+        3. Внутри класса «Сотрудник» написать метод, который выводит информацию об объекте в консоль;
+
+        4. Создать массив из 5 сотрудников
+
+        Пример:
+        Person[] persArray = new Person[5]; // Вначале объявляем массив объектов
+        persArray[0] = new Person("Ivanov Ivan", "Engineer", "ivivan@mailbox.com", "892312312", 30000, 30); // потом для каждой ячейки массива задаем объект
+        persArray[1] = new Person(...);
+        ...
+        persArray[4] = new Person(...);
+
+        5. С помощью цикла вывести информацию только о сотрудниках старше 40 лет;
+
+        6. *** Используя код крестиков-ноликов из материалов занятия №4, переписать их с использованием объектно-ориентированного подхода (разбить на объекты);*/
+
+
 import java.util.*;
 
 public class Lesson_05 {
@@ -20,7 +41,6 @@ public class Lesson_05 {
         Human human = new Human(DOT_X, DOT_O);
         AI ai = new AI(DOT_O, DOT_X);
         Game game = new Game(SIZE);
-
         game.initMap(map);
         game.printMap(map);
         while (true) {
