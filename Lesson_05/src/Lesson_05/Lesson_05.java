@@ -39,6 +39,7 @@ public class Lesson_05 {
         final char DOT_O = 'o';
         final int SIZE = 3;
         char[][] map = new char[SIZE][SIZE];
+        final int NUMBER_TO_WIN = 3;
         //Задание 1 - 5
         //Объявим массив объектов
         Person[] persArray = new Person[5];
@@ -65,7 +66,7 @@ public class Lesson_05 {
         while (true) {
             human.humanTurn(map);
             game.printMap(map);
-            if (game.checkWin(map, DOT_X)) {
+            if (game.checkWin(map, DOT_X, NUMBER_TO_WIN)) {
                 System.out.println("YOU WON!");
                 break;
             }
@@ -73,9 +74,9 @@ public class Lesson_05 {
                 System.out.println("Sorry, DRAW!");
                 break;
             }
-            ai.aiTurn(map);
+            ai.aiTurn(map, DOT_O, DOT_X, NUMBER_TO_WIN);
             game.printMap(map);
-            if (game.checkWin(map, DOT_O)) {
+            if (game.checkWin(map, DOT_O, NUMBER_TO_WIN)) {
                 System.out.println("AI WON!");
                 break;
             }
@@ -141,20 +142,132 @@ class AI{
     Random rand = new Random();
     char dot;
     char dot_enemy;
+    final char dot_empty = '.';
 
     public AI(char dot, char dot_enemy) {
         this.dot = dot;
         this.dot_enemy = dot_enemy;
     }
 
-    void aiTurn(char map[][]) {
+    void aiTurn(char map[][], char dot, char dot_enemy, int number_to_win) {
         int x, y;
+        int i;
+        int j = 0;
+        int win = 0;
+        int aii = 0;
+        int aij = 0;
+        //Проверим главную дагональ, есть ли у игрока есть 2 установленных крестика
+        for (i = 0; i < map.length; i++) {
+            for (j = 0; j < map.length; j++) {
+                if (i == j) {
+                    if (map[i][j] == dot_enemy){
+                        win = win + 1;
+                        aii = i + 1;
+                        aij = j + 1;
+                        if(aii >= map.length){
+                            aii = aii - map.length;
+                        }
+                        if (aij >= map.length){
+                            aij = aij - map.length;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Если есть два крестика , заблокируем
+        if (win == number_to_win - 1){
+            if (isCellValid(aij, aii, map)) {
+                map[aii][aij] = dot;
+                return;
+            }
+        } else {
+            win = 0;
+        }
+
+        //Проверим вторую дагональ, есть ли у игрока есть 2 установленных крестика
+        for (i = map.length - 1, j = 0; i >= 0; i--, j++) {
+
+            if (map[i][j] == dot_enemy){
+                win = win + 1;
+                aii = i - 1;
+                aij = j + 1;
+                if(aii < 0){
+                    aii = aii + map.length;
+                }
+                if (aij >= map.length){
+                    aij = aij - map.length;
+                }
+            }
+        }
+
+        // Если есть два крестика , заблокируем
+        if (win == number_to_win - 1){
+            if (isCellValid(aij, aii, map)) {
+                map[aii][aij] = dot;
+                return;
+            }
+        } else {
+            win = 0;
+        }
+
+        //Проверим горизонтали, есть ли у игрока есть 2 установленных крестика
+        for (i = 0; i < map.length ; i++) {
+            for (j = 0; j < map.length; j++) {
+                if (map[i][j] == dot_enemy) {
+                    win = win + 1;
+                    aii = i;
+                    aij = j + 1;
+                    if(aii >= map.length){
+                        aii = aii - map.length;
+                    }
+                    if (aij >= map.length){
+                        aij = aij - map.length;
+                    }
+                }
+            }
+            // Если есть два крестика , заблокируем
+            if (win == number_to_win - 1) {
+                if (isCellValid(aij, aii, map)) {
+                    map[aii][aij] = dot;
+                    return;
+                }
+            } else {
+                win = 0;
+            }
+        }
+
+        //Проверим вертикали, есть ли у игрока есть 2 установленных крестика
+        for (j = 0; j < map.length ; j++) {
+            for (i = 0; i < map.length; i++) {
+                if (map[i][j] == dot_enemy) {
+                    win = win + 1;
+                    aii = i + 1;
+                    aij = j;
+                }
+                if(aii >= map.length){
+                    aii = aii - map.length;
+                }
+                if (aij >= map.length){
+                    aij = aij - map.length;
+                }
+            }
+            // Если есть два крестика , заблокируем
+            if (win == number_to_win - 1) {
+                if (isCellValid(aij, aii, map)) {
+                    map[aii][aij] = dot;
+                    return;
+                }
+            } else {
+                win = 0;
+            }
+        }
+        //Если перечисленные ситуации не выполнились, установим нолик стандартно, через rand()
         do {
             x = rand.nextInt(map.length);
             y = rand.nextInt(map.length);
         } while (!isCellValid(x, y, map));
-        map[y][x] = dot;
-    }
+        map[y][x] = dot;}
 
     boolean isCellValid(int x, int y, char map[][]) {
         if (x < 0 || y < 0 || x >= map.length || y >= map.length)
@@ -195,18 +308,71 @@ class Game{
         System.out.println();
     }
 
-    public boolean checkWin(char[][] map, char dot) {
-        // check horizontals
-        if (map[0][0] == dot && map[0][1] == dot && map[0][2] == dot) return true;
-        if (map[1][0] == dot && map[1][1] == dot && map[1][2] == dot) return true;
-        if (map[2][0] == dot && map[2][1] == dot && map[2][2] == dot) return true;
-        // check verticals
-        if (map[0][0] == dot && map[1][0] == dot && map[2][0] == dot) return true;
-        if (map[0][1] == dot && map[1][1] == dot && map[2][1] == dot) return true;
-        if (map[0][2] == dot && map[1][2] == dot && map[2][2] == dot) return true;
-        // check diagonals
-        if (map[0][0] == dot && map[1][1] == dot && map[2][2] == dot) return true;
-        if (map[2][0] == dot && map[1][1] == dot && map[0][2] == dot) return true;
+    public boolean checkWin(char[][] map, char dot, int number_to_win) {
+        // Необходимо уточнить, что для поля 5х5 не рассмотрел вариант выигрыша, когда 4 фишки
+        // установлены не на главной либо второй диагонали
+
+        int win = 0;
+        //Проверим главную дагональ
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (i == j) {
+                    if (map[i][j] == dot){
+                        win = win + 1;
+                    }
+                }
+            }
+        }
+
+        // Проверим, есть ли выигрышная комбинация
+        if (win == number_to_win){
+            return true;
+        } else {
+            win = 0;
+        }
+
+        //Проверим вторую дагональ
+        for (int i = map.length - 1, j = 0; i >= 0; i--, j++) {
+
+            if (map[i][j] == dot){
+                win = win + 1;
+            }
+        }
+
+        // Проверим, есть ли выигрышная комбинация
+        if (win == number_to_win){
+            return true;
+        } else {
+            win = 0;
+        }
+
+        //Проверим горизонтали
+        for (int i = 0; i < map.length ; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[i][j] == dot) {
+                    win = win + 1;
+                }
+            }
+            if (win == number_to_win) {
+                return true;
+            } else {
+                win = 0;
+            }
+        }
+
+        //Проверим вертикали
+        for (int i = 0; i < map.length ; i++) {
+            for (int j = 0; j < map.length; j++) {
+                if (map[j][i] == dot) {
+                    win = win + 1;
+                }
+            }
+            if (win == number_to_win) {
+                return true;
+            } else {
+                win = 0;
+            }
+        }
         return false;
     }
 
