@@ -3,13 +3,12 @@ package Lesson_05;
 /**
  * Java 1. Home Work 5
  * @author Ilya Lutsevich
- * @version dated Dec 06 2017
+ * @version dated Dec 08 2017
  * @link https://github.com/lutsiy/git-repo.git
  */
 import java.util.*;
 
 public class Lesson_05 {
-
 
     Random rand = new Random();
 
@@ -17,81 +16,42 @@ public class Lesson_05 {
         final char DOT_X = 'x';
         final char DOT_O = 'o';
         final int SIZE = 3;
-
-        Map map = new Map(SIZE);
-        Human human = new Human(DOT_X);
-        AI ai = new AI(DOT_O);
+        char[][] map = new char[SIZE][SIZE];
+        Human human = new Human(DOT_X, DOT_O);
+        AI ai = new AI(DOT_O, DOT_X);
         Game game = new Game(SIZE);
 
-        map.initMap(SIZE);
-
+        game.initMap(map);
+        game.printMap(map);
         while (true) {
-            human.humanTurn(map.field);
-            map.printMap(map.field);
-            if (game.checkWin(map.field, DOT_X)) {
+            human.humanTurn(map);
+            game.printMap(map);
+            if (game.checkWin(map, DOT_X)) {
                 System.out.println("YOU WON!");
                 break;
             }
-            if (map.isMapFull()) {
+            if (game.isMapFull(map)) {
                 System.out.println("Sorry, DRAW!");
                 break;
             }
-            ai.aiTurn(map.field);
-            map.printMap(map.field);
-            if (game.checkWin(map.field, DOT_O)) {
+            ai.aiTurn(map);
+            game.printMap(map);
+            if (game.checkWin(map, DOT_O)) {
                 System.out.println("AI WON!");
                 break;
             }
-
         }
         System.out.println("GAME OVER.");
-
-
     }
-
-
 }
-
-class Map{
-    final char DOT_EMPTY = '.';
-    private int size;
-    char[][] field = new char[size][size];
-
-    public Map(int size) {
-        this.size = size;
-    }
-
-    void initMap(int size) {
-        char[][] field = new char[size][size];
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                field[i][j] = DOT_EMPTY;
-    }
-
-    boolean isMapFull() {
-        for (int i = 0; i < size; i++)
-            for (int j = 0; j < size; j++)
-                if (field[i][j] == DOT_EMPTY)
-                    return false;
-        return true;
-    }
-
-    void printMap(char map[][]) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++)
-                System.out.print(map[i][j] + " ");
-            System.out.println();
-        }
-        System.out.println();
-    }
-
-}//
 class Human {
     Scanner sc = new Scanner(System.in);
-    char dot_x;
+    char dot;
+    char dot_enemy;
 
-    public Human(char dot_x) {
-        this.dot_x = dot_x;
+    public Human(char dot, char dot_enemy) {
+        this.dot = dot;
+        this.dot_enemy = dot_enemy;
     }
 
     public void humanTurn(char map[][]) {
@@ -101,40 +61,41 @@ class Human {
             x = sc.nextInt() - 1;
             y = sc.nextInt() - 1;
         } while (!isCellValid(x, y, map));
-        map[y][x] = dot_x;
+        map[y][x] = dot;
     }
     boolean isCellValid(int x, int y, char map[][]) {
         if (x < 0 || y < 0 || x >= map.length || y >= map.length)
             return false;
-        if (map[y][x] == dot_x)
-            return true;
-        return false;
+        if (map[y][x] == dot_enemy)
+            return false;
+        return true;
     }
 }
 class AI{
-    Scanner sc = new Scanner(System.in);
-    char dot_x;
+    Random rand = new Random();
+    char dot;
+    char dot_enemy;
 
-    public AI(char dot_x) {
-        this.dot_x = dot_x;
+    public AI(char dot, char dot_enemy) {
+        this.dot = dot;
+        this.dot_enemy = dot_enemy;
     }
 
     void aiTurn(char map[][]) {
         int x, y;
         do {
-            System.out.println("Enter X and Y (1..3):");
-            x = sc.nextInt() - 1;
-            y = sc.nextInt() - 1;
+            x = rand.nextInt(map.length);
+            y = rand.nextInt(map.length);
         } while (!isCellValid(x, y, map));
-        map[y][x] = dot_x;
+        map[y][x] = dot;
     }
 
     boolean isCellValid(int x, int y, char map[][]) {
         if (x < 0 || y < 0 || x >= map.length || y >= map.length)
             return false;
-        if (map[y][x] == dot_x)
-            return true;
-        return false;
+        if (map[y][x] == dot_enemy)
+            return false;
+        return true;
     }
 
 }
@@ -145,6 +106,30 @@ class Game{
     public Game(int size) {
         this.size = size;
     }
+    void initMap(char[][] map) {
+        for (int i = 0; i < map.length; i++)
+            for (int j = 0; j < map.length; j++)
+                map[i][j] = DOT_EMPTY;
+    }
+
+    boolean isMapFull(char[][] map) {
+        for (int i = 0; i < map.length; i++)
+            for (int j = 0; j < map.length; j++)
+                if (map[i][j] == DOT_EMPTY)
+                    return false;
+        return true;
+    }
+
+    void printMap(char map[][]) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map.length; j++)
+                System.out.print(map[i][j] + " ");
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+
 
     public boolean checkWin(char[][] map, char dot) {
         // check horizontals
@@ -165,42 +150,3 @@ class Game{
 
 }
 
-
-
-//class TicTacToe {
-//
-
-
-//
-//
-
-//
-//    public static void main(String[] args) {
-//        new TicTacToe();
-//    }
-//
-//    TicTacToe() {
-
-//    }
-//
-
-//
-//
-//
-
-//
-//    void aiTurn() {
-//        int x, y;
-//        do {
-//            x = rand.nextInt(SIZE);
-//            y = rand.nextInt(SIZE);
-//        } while (!isCellValid(x, y));
-//        map[y][x] = DOT_O;
-//    }
-//
-
-//
-
-//
-
-//}
