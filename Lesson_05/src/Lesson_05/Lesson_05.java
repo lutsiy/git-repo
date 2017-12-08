@@ -27,17 +27,36 @@ package Lesson_05;
         6. *** Используя код крестиков-ноликов из материалов занятия №4, переписать их с использованием объектно-ориентированного подхода (разбить на объекты);*/
 
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import java.util.*;
 
 public class Lesson_05 {
 
     Random rand = new Random();
-
     public static void main(String[] args) {
         final char DOT_X = 'x';
         final char DOT_O = 'o';
         final int SIZE = 3;
         char[][] map = new char[SIZE][SIZE];
+        //Задание 1 - 5
+        //Объявим массив объектов
+        Person[] persArray = new Person[5];
+        persArray[0] = new Person("Ivanov Ivan",        "Engineer",                 "Engineer@company.com",     "892312312",    30000, 40);
+        persArray[1] = new Person("Petrov Petr",        "Director",                 "Director@company.com",     "892312312",    30000, 50);
+        persArray[2] = new Person("Sidorov Ivan",       "Accountant",               "Accountant@company.com",   "892312312",    30000, 60);
+        persArray[3] = new Person("Nikolaev Nicholas",  "Java Developer",           "Programmer@company.com",   "892312312",    30000, 36);
+        persArray[4] = new Person("Lutsevich Ilya",     "Junior Java Developer",    "lutsiy@inbox.ru",          "89139273124",  40000, 36);
+
+        for (int num = 0; num < persArray.length; num++){
+
+            if (persArray[num].age >= 40) {
+                persArray[num].getinfo();
+                System.out.println("\n////////////\n");
+            }
+        }
+
+        //Задание 6
         Human human = new Human(DOT_X, DOT_O);
         AI ai = new AI(DOT_O, DOT_X);
         Game game = new Game(SIZE);
@@ -62,6 +81,33 @@ public class Lesson_05 {
             }
         }
         System.out.println("GAME OVER.");
+    }
+}
+class Person{
+    String surname;
+    String position;
+    String email;
+    String phone;
+    int salary;
+    int age;
+
+    public Person(String surname, String position, String email, String phone, int salary, int age) {
+        this.surname = surname;
+        this.position = position;
+        this.email = email;
+        this.phone = phone;
+        this.salary = salary;
+        this.age = age;
+    }
+
+    public void getinfo(){
+
+        System.out.println("Еmployee surname: "   + this.surname +
+                "\nposition: "         + this.position +
+                "\ne-mail: "           + this.email +
+                "\nphone: "            + this.phone +
+                "\nsalary: "           + this.salary +
+                "\nage: "              + this.age);
     }
 }
 class Human {
@@ -148,8 +194,6 @@ class Game{
         }
         System.out.println();
     }
-
-
 
     public boolean checkWin(char[][] map, char dot) {
         // check horizontals
