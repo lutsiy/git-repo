@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1513092861 source:h:\geekbrains\java\git-repo\algoritm\lesson_01\lesson_001\lesson_01\main.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+
