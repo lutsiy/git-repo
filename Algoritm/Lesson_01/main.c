@@ -4,7 +4,7 @@
 
 /******************************************************************************************
 Илья Луцевич
-2017-12-12
+2017-12-13
 
 4.Реализовать алгоритм ускоренного возведения в степень.
 3.*Реализовать алгоритм поиска простых чисел "Решето Эратосфена".
@@ -57,12 +57,98 @@ int main()
 }
 void solution1()
 {
-    printf("Solution 1\n");
+    printf("\nSolution 1\n\n");
+
+    int chess[8][8];
+    int i;
+    int j;
+    int x1;
+    int x2;
+    int y1;
+    int y2;
+
+
+    for (i = 0; i < 8; i++)
+    {
+        for (j = 0; j < 8; j++)
+        {
+            chess[i][j] = (i+j)%2;
+        }
+    }
+
+    for (i = 0; i < 8; i++)
+    {
+        for (j = 0; j < 8; j++)
+        {
+            printf("%d ", chess[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\n");
+
+    printf("Input X1:");
+    scanf("%d", &x1);
+
+    printf("Input X2:");
+    scanf("%d", &x2);
+
+    printf("Input Y1:");
+    scanf("%d", &y1);
+
+    printf("Input Y2:");
+    scanf("%d", &y2);
+
+    if (chess[x1][y1] == chess[x2][y2])
+    {
+        printf("\nThe same color!\n\n");
+    }
+    else
+    {
+        printf("\nNot the same color!\n\n");
+    }
 }
 void solution2()
 {
-    printf("Solution 2\n");
-// Решение
+    printf("\nSolution 2\n");
+
+    int a = 625;
+    int b;
+    int count;
+    int length_number = 10;
+    int arr[500000];
+    int i;
+
+
+    for (i = 0; i < 500000; i++)
+    {
+        arr[i] = i + 1;
+
+    }
+
+    for (i = 0; i < 500000; i++)
+    {
+        length_number = 10;
+        a = arr[i];
+        count = 0;
+        while(a)
+        {
+            if (count > 0)
+            {
+                length_number*= 10;
+            }
+            a /= 10;
+            count++;
+        }
+        if (length_number > 0)
+        {
+            b = (arr[i]*arr[i])%(length_number);
+            if (b == arr[i])
+            {
+                printf("%d -> %d\n",arr[i], arr[i]*arr[i]);
+            }
+        }
+    }
+    printf("\n");
 
 }
 void solution3()
@@ -73,7 +159,7 @@ void solution3()
     int j;
     int seti = 0;
     int setj = 0;
-     int arr[50];
+    int arr[50];
     int arrmax = 0;
     time_t starttime;
     time_t endtime;
