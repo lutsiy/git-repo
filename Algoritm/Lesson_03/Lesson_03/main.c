@@ -107,8 +107,9 @@ void bubble()
     return 0;
 }
 
- void bubble_optimized(){
-  puts("optimized\n");
+void bubble_optimized()
+{
+    puts("optimized\n");
     int a[] = {1,2,3,4,5,6,8,7,9,10};
     int n = 0;
     int i;
@@ -147,7 +148,7 @@ void bubble()
 
 
     return 0;
- }
+}
 
 
 void solution1()
@@ -190,32 +191,63 @@ void solution2()
     printf("number %d\n", n);
     return 0;
 }
+
+int binary_Search(int n, int a[], int searchFor)
+{
+    int first = 0;
+    int last = n;
+
+    int mid;
+
+    while (first < last)
+    {
+        mid = first + (last - first) / 2;
+
+        if (searchFor <= a[mid])
+            last = mid;
+        else
+            first = mid + 1;
+    }
+
+    if (a[last] == searchFor)
+    {
+        return last ;
+    }
+    else
+    {
+        return -1;
+    }
+
+
+}
+
 void solution3()
 {
-    printf("Solution 3\n");
+    printf("\nSolution 3\n");
+    int searchFor = 6;
+    int a[] = {1,2,3,4,5,6,7,8,9,10};
+    int found;
+
+    found = binary_Search(9, a, searchFor);
+
+    if (found != -1)
+    {
+        printf("%d Found in", searchFor);
+        print(10, a);
+        printf("index = %d\n\n", found);
+    }
+    else
+    {
+        printf("%d not Found in", searchFor);
+        print(10, a);
+        printf("\n\n");
+    }
 
 }
 void solution4()
 {
-    int a = 2, b = 8;
-    long p = 1;
-    printf("Solution 4\n");
-    while (b)
-    {
-        if (b%2)
-        {
-            p = p*a;
-            b--;
-        }
-        else
-        {
-            a = a*a;
-            b = b/2;
-        }
 
-    }
-
-    printf("%d\n", p);
+    printf("Solution 4\n\n");
 
 }
 void menu()
