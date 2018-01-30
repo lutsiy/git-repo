@@ -2,8 +2,8 @@ package ru.geekbrains.java2.lesson2;
 
 public class MyArraySizeException extends  RuntimeException{
 
-    public MyArraySizeException(String message) {
-        super("Неверный размер массива!");
+    public MyArraySizeException() {
+
     }
 
     public MyArraySizeException(String message, Throwable cause) {

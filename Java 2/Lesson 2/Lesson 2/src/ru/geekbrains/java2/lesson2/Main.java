@@ -4,41 +4,58 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int ARRAY_LENGTH = 5;
+        int ARRAY_LENGTH = 4;
 
-       int[][] arr = new int[ARRAY_LENGTH][ARRAY_LENGTH];
+        int[][] arr = new int[ARRAY_LENGTH][ARRAY_LENGTH];
 
-       for (int i = 0; i < arr.length; i++ ){
-           for (int j = 0; j < arr.length; j++){
-               arr[i][j] = i+j;
-           }
-       }
-        try{checkSize(arr);}
-        catch (MyArraySizeException e){e.printStackTrace();}
-    }
-    public static void checkSize(int[][] arr) throws MyArraySizeException{
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                arr[i][j] = i + j;
+            }
+        }
+
+        arr[1][1] = 's';
+
+        int sum = 0;
 
         try {
+            sum = checkSize(arr);
+        } catch (MyArraySizeException e) {
+            System.out.println("Неверный размер массива!");
+        } catch (MyArrayDataException e) {
+            System.out.println("Неверные данные в ячейке [" + e.getX() + "] [" + e.getY() + "] ");
+        }
+
+
+        System.out.printf("Сумма: " + sum);
+    }
+
+
+        public static int checkSize(int[][] arr) throws MyArraySizeException{
+
+
             if (arr.length > 4) {
-                throw new MyArraySizeException("Неверный размер массива!");
+                throw new MyArraySizeException();
             }
             if (arr[0].length > 4) {
-                throw new MyArraySizeException("Неверный размер массива!");
+                throw new MyArraySizeException();
             }
-        }catch (MyArraySizeException e){throw new MyArraySizeException("Неверный размер массива!"); }
 
 
+    char s;
     int sum = 0;
         for (int i = 0; i < arr.length; i++){
             for (int j = 0; j < arr[0].length; j++){
-              sum = sum + arr[i][j];
+              s = (char)arr[i][j];
+                if (Character.isDigit(s)){
+                 sum = sum + arr[i][j];
+            } else {
+              throw new MyArrayDataException(i,j);
             }
     }
 
-        System.out.printf("Cумма: "+ sum);
-
-
-
     }
 
+            return sum;
+        }
 }
