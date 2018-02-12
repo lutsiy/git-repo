@@ -5,16 +5,113 @@ import java.util.concurrent.Executors;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        ExecutorService service = Executors.newFixedThreadPool(10);
-        service.execute(new Runnable() {
+        Counter counter = new Counter();
+        //System.out.println(counter.value());
+        Thread t1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                System.out.println("A");
+                for (int i = 0; i < 1_000_000; i++) {
+                    counter.inc();
+
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+                }
             }
         });
-//service.shutdown();
+
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i < 1_000_000; i++) {
+                    counter.dec();
+
+//                    try {
+//                        Thread.sleep(1);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+                }
+            }
+        });
+
+        t1.start();
+        t2.start();
+
+        t1.join();
+        t2.join();
+
+        System.out.println(counter.value());
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                int time = 0;
+//                while (true){
+//                time++;
+//
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    System.out.println(time);
+//                }
+//
+//
+//            }
+//        });
+//        t.setDaemon(true);
+//        t.start();
+//
+//        Thread.sleep(5000);
+//        System.out.println("end");
+
+
+
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 0; i < 5; i++) {
+//                    System.out.println(i);
+//                }
+//            }
+//        });
+//
+//        t.start();
+//        try {
+//            t.join();
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println("end");
+
+
+        //
+//        Thread t = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.out.println("A");
+//            }
+//        });
+//
+//        t.start();
+//        t.start();
+
+
+//        ExecutorService service = Executors.newFixedThreadPool(10);
+//        service.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                System.out.println("A");
+//            }
+//        });
+//        service.shutdown();
+
+
 //        Thread t1 = new Thread(new Runnable() {
 //            @Override
 //            public void run() {
